@@ -1,4 +1,4 @@
-# social-media
+# social media web application
 Social media web application developed in C# .NET with Razor Pages
 
 This application is a personal project I created for fun resume project. 
