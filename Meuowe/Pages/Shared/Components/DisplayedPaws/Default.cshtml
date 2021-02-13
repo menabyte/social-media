@@ -1,0 +1,28 @@
+﻿@model List<Meuowe.Areas.Database.Models.DatabaseObjects.UserPawDBO>
+@using Meuowe.Areas.Database.Models.Identity
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+<input type="hidden" id="pageIndex" value="@ViewData["pageIndex"]" />
+
+@if (Model.Count > 0)
+{
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        @await Component.InvokeAsync("DisplayedPaw", new { userPaw = Model.ElementAt(i) })
+    }
+}
+else
+{
+    <div class="col-12 col-sm-12 text-center text-orange font-weight-bold" id="no-paws">
+        the print is not available :\
+    </div>
+}

@@ -1,0 +1,46 @@
+@page
+@model Meuowe.Areas.Account.Pages.Personal.ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = Meuowe.Areas.Navigation.Pages.ManageNavPages.Index;
+}
+
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+
+<div class="container">
+    <div class="row justify-content-center text-center">
+        <div class="col-12 col-sm-12 col-md-6">
+            <div class="meuowe-jumbotron">
+                <form id="profile-form" method="post">
+                    <h3 class="text-orange">name</h3>
+                    <hr class="meuowe-jumbotron-seperator" />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <input asp-for="Input.UserName" placeholder="user name" class="form-control" />
+                        <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Input.DisplayName" placeholder="display name" class="form-control" />
+                        <span asp-validation-for="Input.DisplayName" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <h3 class="text-orange">contact</h3>
+                    <hr class="meuowe-jumbotron-seperator" />
+                    <div class="form-group">
+                        <input asp-for="Input.PhoneNumber" placeholder="phone number" class="form-control" />
+                        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Input.Email" placeholder="email address" class="form-control" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <button id="update-profile-button" type="submit" class="btn meuowe-button-primary">Update Contact</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

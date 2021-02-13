@@ -1,0 +1,42 @@
+﻿@model List<Meuowe.Areas.Database.Models.ViewModels.MeuoweOfferVM>
+@using Meuowe.Areas.Database.Models.Identity
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+
+@if (Model.Count > 0)
+{
+    <div class="list-group">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <form method="post">
+                <button type="submit" asp-area="Social" asp-page="/Paws/UserPawMeuowe" asp-page-handler="AcceptMeuowe" asp-route-MeuoweId="@Model.ElementAt(i).UserMeuowe.Id">
+                    <div class="d-flex flex-column w-100 justify-content-between">
+                        <h5 class="mb-1">@Model.ElementAt(i).UserName</h5>
+                        <small>@Model.ElementAt(i).UserMeuowe.CreatedDate</small>
+                    </div>
+                    <p class="mb-1">@Model.ElementAt(i).UserMeuowe.Cost</p>
+                    <medium>Click to accept this Meuowe.</medium>
+                    <br />
+                    <small>Accepting this Meuowe voids all other offers for this paw.</small>
+                </button>
+            </form>
+        }
+    </div>
+}
+else
+{
+    <div class="col-md-12 text-center" id="no-paws">
+        <p>
+            no meuowes for this paw :(
+        </p>
+    </div>
+}

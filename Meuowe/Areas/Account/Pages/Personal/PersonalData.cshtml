@@ -1,0 +1,30 @@
+﻿@page
+@model Meuowe.Areas.Account.Pages.PersonalDataModel
+@{
+    ViewData["Title"] = "Personal Data";
+    ViewData["ActivePage"] = Meuowe.Areas.Navigation.Pages.ManageNavPages.PersonalData;
+}
+
+<div class="container">
+    <div class="row justify-content-center text-center">
+        <div class="col-9 col-md-9 col-lg-6">
+            <div class="jumbotron" style="border:2px solid white; background-color:rgba(255, 255, 255, 0.7);">
+                <h3 class="text-primary">personal data</h3>
+                <p class="text-primary">Your account contains personal data that you have given us. This page allows you to download or delete that data.</p>
+                <p class="text-primary">
+                    <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
+                </p>
+                <form id="download-data" asp-page="DownloadPersonalData" method="post" class="form-group">
+                    <button class="btn btn-primary" style="border:2px solid white;" type="submit">download</button>
+                </form>
+                <p>
+                    <a id="delete" asp-page="DeletePersonalData" class="btn btn-primary" style="border:2px solid white;">delete</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+        @section Scripts {
+            <partial name="_ValidationScriptsPartial" />
+        }

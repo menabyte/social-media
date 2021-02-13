@@ -1,0 +1,29 @@
+﻿@model  Meuowe.Areas.Database.Models.ViewModels.PawVM
+
+@{ 
+    <!-- Modal -->
+    <div class="modal-dialog meuowe-modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title text-center text-almost-black" id="exampleModalLabel">reply to <span class="text-orange">@@@Model.UserName's</span> print </h5>
+            </div>
+            <form method="post" asp-page-handler="Reply">
+                <div class="modal-body">
+                    <div class="form-group">
+                         <label class="control-label"></label>
+                        <input type="hidden" id="pawId" name="pawId" value="@Model.UserPaw.Id" />
+                        <input class="form-control" id="pawMessage" name="pawMessage" placeholder="say something..." />
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn meuowe-button-primary" onclick="submitReply()">send print</button>
+                    <button type="button" class="btn meuowe-btn-outline-primary" data-dismiss="modal" aria-label="Close" onclick="closeReply()">
+                        <span aria-hidden="true">close</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+}

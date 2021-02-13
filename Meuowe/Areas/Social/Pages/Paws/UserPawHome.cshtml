@@ -1,0 +1,403 @@
+﻿@page
+@model Meuowe.Areas.Social.Pages.Paws.UserPawHomeModel
+@using Meuowe.Areas.Database.Models.Identity
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@inject SignInManager<ApplicationUser> SignInManager
+@{ var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any(); }
+
+@{ ViewData["Title"] = "Pawprints"; }
+
+<div class="meuowe-print-home col font-weight-bold">
+    <input type="hidden" id="home" value="@ViewData["currentView"]" />
+    <input type="hidden" id="userView" value="@ViewData["userView"]" />
+
+
+    <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true" style="display: none;">
+        <div id="create-paw"></div>
+    </div>
+
+    <div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+        <div id="reply-paw"></div>
+    </div>
+    <div class="modal fade" id="meuoweModal" tabindex="-1" role="dialog" aria-labelledby="meuoweModalLabel" aria-hidden="true" style="display: none;">
+        <div id="send-meuowe"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div id="home-profile"></div>
+        </div>
+    </div>
+
+    <br />
+    <br />
+
+    <div class="row">
+        <div class="col-12">
+            <input type="button" class="btn meuowe-button-primary btn-sm" data-toggle="modal" data-target="#createModal" value="leave a print" onclick="createPaw()" />
+        </div>
+    </div>
+
+    <br /><br />
+
+</div>
+
+<div class="col text-center font-weight-bold">
+    <div class="row meuowe-print-nav">
+        <div class="col-12">
+            <ul class="nav nav-fill w-100 justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link text-orange" asp-area="Social" asp-page="/Paws/UserPawHome" asp-page-handler="PawHome" asp-route-home="home" asp-route-userView="@ViewData["userView"]" title="Manage">prints</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-orange" asp-area="Social" asp-page="/Paws/UserPawHome" asp-page-handler="PawHome" asp-route-home="shake" asp-route-userView="@ViewData["userView"]" title="Manage">reprints</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-orange" asp-area="Social" asp-page="/Paws/UserPawHome" asp-page-handler="PawHome" asp-route-home="reply" asp-route-userView="@ViewData["userView"]" title="Manage">replies</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-orange" asp-area="Social" asp-page="/Paws/UserPawHome" asp-page-handler="PawHome" asp-route-home="wag" asp-route-userView="@ViewData["userView"]" title="Manage">likes</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row d-flex justify-content-center text-center print-block" id="displayed-prints"></div>
+</div>
+
+@section Scripts {
+
+    <!--load profile-->
+    <script>
+        $(document).ready(function () {
+            showProfile();
+        });
+    </script>
+
+    <!--load prints-->
+    <script>
+        $(document).ready(function () {
+            $("#displayed-prints").empty();
+            showPaws();
+        });
+    </script>
+
+    <script>
+        $(window).scroll(function () {
+            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                showPaws();
+            }
+        });
+    </script>
+
+    <!--load views-->
+    <!--**********************************************-->
+    <script>
+        function showProfile() {
+            var userView;
+            if (document.getElementById('userView') != null) {
+                userView = document.getElementById('userView').value;
+            }
+
+            $.ajax({
+                type: "GET",
+                data: {
+                    "userView": userView
+                },
+                url: "@Url.Page("UserPawHome", "ProfileViewComponent")",
+                success: function (result) {
+                    $("#home-profile").empty();
+                    $("#home-profile").append(result);
+                }
+            });
+        }
+    </script>
+
+
+    <!--load prints-->
+    <!--**********************************************-->
+    <script>
+        function showPaws() {
+            var home;
+            if (document.getElementById('home') != null) {
+                home = document.getElementById('home').value;
+            }
+
+            var userView;
+            if (document.getElementById('userView') != null) {
+                userView = document.getElementById('userView').value;
+            }
+
+
+            var pageIndex;
+            if (document.getElementById('pageIndex') != null) {
+                pageIndex = document.getElementById('pageIndex').value;
+            }
+
+            $.ajax({
+                     type: "GET",
+                     data: {
+                         "home": home,
+                         "userView": userView,
+                         "pageIndex": pageIndex,
+                     },
+                    url: "@Url.Page("UserPawHome", "PawsViewComponent")",
+                    success: function (result) {
+                        $("#no-paws").remove();
+                        $("#displayed-prints").append(result);
+
+                        if (document.getElementById('pageIndex') != null) {
+                            pageIndex = document.getElementById('pageIndex').value;
+                            pageIndex++;
+                            document.getElementById('pageIndex').value = pageIndex;
+                        }
+                    }
+                });
+        }
+    </script>
+
+    <script>
+        function addPaw(pawId) {
+            $.ajax({
+                type: "GET",
+                data:
+                {
+                    "pawId": pawId
+                },
+                url: "@Url.Page("UserPawHome", "PawViewComponent")",
+                success: function (result) {
+                    $("#displayed-prints").prepend(result);
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function refreshPaw(pawId) {
+            $.ajax({
+                type: "GET",
+                data:
+                {
+                    "pawId": pawId
+                },
+                 url: "@Url.Page("UserPawHome", "PawViewComponent")",
+                success: function (result) {
+                    $('#paw-id-' + pawId).empty();
+                    $('#paw-id-' + pawId).replaceWith(result);
+                }
+            });
+        }
+    </script>
+
+
+    <!--print transactions-->
+    <!--**********************************************-->
+    <script>
+        function createPaw() {
+            $.ajax({
+                type: "GET",
+                url: "@Url.Page("UserPawHome", "CreatePawPartial")",
+                success: function (result) {
+                    $("#create-paw").html(result);
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function submitPaw() {
+            var pawMessage = $("#pawMessage").val();
+            $.ajax({
+                url: "@Url.Page("UserPawHome", "Create")",
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                data: "PawMessage=" + pawMessage,
+                success: function (result) {
+                    closeCreate();
+                    addPaw(result);
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function replyUser(pawId, userPawId) {
+            $.ajax({
+                type: "GET",
+                data: {
+                    "pawId": pawId,
+                    "userPawId": userPawId,
+                },
+                url: "@Url.Page("UserPawHome", "ReplyUserPartial")",
+                success: function (result) {
+                    $("#reply-paw").html(result);
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function submitReply() {
+            var pawId = $("#pawId").val();
+            var pawMessage = $("#pawMessage").val();
+            $.ajax({
+                url: "@Url.Page("UserPawHome", "Reply")",
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                data: "PawId=" + pawId + "&PawMessage=" + pawMessage,
+                success: function (result) {
+                    closeReply();
+                    refreshPaw(pawId);
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function sendMeuowe(pawId, userPawId) {
+            $.ajax({
+                type: "GET",
+                data: {
+                    "pawId": pawId,
+                    "userPawId": userPawId,
+                },
+                url: "@Url.Page("UserPawHome", "SendMeuowePartial")",
+                success: function (result) {
+                    $("#send-meuowe").html(result);
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function submitMeuowe() {
+            var pawId = $("#pawId").val();
+            var meuoweOffer = $("#meuoweOffer").val();
+            $.ajax({
+                url: "@Url.Page("UserPawHome", "Meuowe")",
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                data: "PawId=" + pawId +
+                    "&MeuoweOffer=" + meuoweOffer,
+                success: function (result) {
+                    closeMeuowe();
+                    refreshPaw(pawId);
+                }
+            });
+        }
+    </script>
+
+    <!--print interactions-->
+    <script>
+        function followUser(userChildId) {
+             $.ajax({
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                     data: {
+                             "userChildId": userChildId,
+                         },
+                    url: "@Url.Page("UserPawHome", "UserFollow")",
+                    success: function (result) {
+                        showProfile();
+                    }
+                });
+        }
+    </script>
+
+    <script>
+        function shakePaw(pawId) {
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: {
+                    "pawId": pawId
+                },
+                url: "@Url.Page("UserPawHome", "ShakePaw")",
+                success: function (result) {
+                    refreshPaw(pawId);
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function wagTail(pawId) {
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: {
+                    "pawId": pawId
+                },
+                url: "@Url.Page("UserPawHome", "WagTail")",
+                success: function (result) {
+                    refreshPaw(pawId);
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function deletePrint(pawId) {
+            $.ajax({
+                url: "@Url.Page("UserPawHome", "Delete")",
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                data: "pawId=" + pawId,
+                success: function (result) {
+                    closeDelete();
+                    $('#paw-id-' + pawId).remove();
+                }
+            });
+        }
+    </script>
+
+    <!--close modals-->
+    <script>
+        function closeCreate() {
+            $("#createModal").empty();
+            $('.modal-backdrop').remove();
+            $(document.body).removeClass('modal-open');
+            $("#createModal").replaceWith('<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true" style="display: none;"><div id="create-paw"></div></div>');
+        }
+    </script>
+
+    <script>
+        function closeReply() {
+            $("#replyModal").empty();
+            $('.modal-backdrop').remove();
+            $(document.body).removeClass('modal-open');
+            $("#replyModal").replaceWith('<div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;"><div id="reply-paw"></div></div>');
+        }
+    </script>
+
+    <script>
+        function closeDelete() {
+            $("#deleteModal").empty();
+            $('.modal-backdrop').remove();
+            $(document.body).removeClass('modal-open');
+        }
+    </script>
+}

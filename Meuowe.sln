@@ -1,0 +1,25 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E68704F0-E1EF-4D46-B142-0161683301D4}"
+	ProjectSection(SolutionItems) = preProject
+		Meuowe.sln = Meuowe.sln
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meuowe", "Meuowe\Meuowe.csproj", "{140477DD-8DB7-43F5-89EB-8EC4C38F6B2B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{140477DD-8DB7-43F5-89EB-8EC4C38F6B2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{140477DD-8DB7-43F5-89EB-8EC4C38F6B2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{140477DD-8DB7-43F5-89EB-8EC4C38F6B2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{140477DD-8DB7-43F5-89EB-8EC4C38F6B2B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{140477DD-8DB7-43F5-89EB-8EC4C38F6B2B} = {E68704F0-E1EF-4D46-B142-0161683301D4}
+	EndGlobalSection
+EndGlobal

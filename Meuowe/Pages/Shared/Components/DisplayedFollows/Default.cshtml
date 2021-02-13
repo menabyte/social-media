@@ -1,0 +1,29 @@
+﻿@model List<Meuowe.Areas.Database.Models.Identity.ApplicationUser>
+@using Meuowe.Areas.Database.Models.Identity
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+@if (Model.Count > 0)
+{
+        <ul class="meuowe-follow-ul">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                @await Component.InvokeAsync("DisplayedFollow", new { user = Model.ElementAt(i) })
+            }
+        </ul>
+    
+}
+else
+{
+    <div class="col-md-12 text-center text-orange font-weight-bold" id="no-follows">
+        no trails to follow :(
+    </div>
+}

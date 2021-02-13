@@ -1,0 +1,68 @@
+﻿@page
+@model Meuowe.Areas.Account.Pages.Authentication.TwoFactorAuthenticationModel
+@{
+    ViewData["Title"] = "Two-factor authentication (2FA)";
+    ViewData["ActivePage"] = Meuowe.Areas.Navigation.Pages.ManageNavPages.TwoFactorAuthentication;
+}
+
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<div class="container">
+    <div class="row justify-content-center text-center">
+        <div class="col-9 col-md-9 col-lg-6">
+            <div class="jumbotron" style="border:2px solid white; background-color:rgba(255, 255, 255, 0.7);">
+                <h3 class="text-primary">mfa</h3>
+                @if (Model.Is2faEnabled)
+                {
+                    if (Model.RecoveryCodesLeft == 0)
+                    {
+                        <div class="alert alert-danger">
+                            <strong>You have no recovery codes left.</strong>
+                            <p>You must <a asp-page="./GenerateRecoveryCodes">generate a new set of recovery codes</a> before you can log in with a recovery code.</p>
+                        </div>
+                    }
+                    else if (Model.RecoveryCodesLeft == 1)
+                    {
+                        <div class="alert alert-danger">
+                            <strong>You have 1 recovery code left.</strong>
+                            <p>You can <a asp-page="./GenerateRecoveryCodes">generate a new set of recovery codes</a>.</p>
+                        </div>
+                    }
+                    else if (Model.RecoveryCodesLeft <= 3)
+                    {
+                        <div class="alert alert-warning">
+                            <strong>You have @Model.RecoveryCodesLeft recovery codes left.</strong>
+                            <p>You should <a asp-page="./GenerateRecoveryCodes">generate a new set of recovery codes</a>.</p>
+                        </div>
+                    }
+
+                    if (Model.IsMachineRemembered)
+                    {
+                        <form method="post" style="display: inline-block">
+                            <button type="submit" class="btn btn-primary" style="border:2px solid white;">forget this browser</button>
+                        </form>
+                    }
+                    <a asp-page="./Disable2fa" class="btn btn-primary" style="border:2px solid white;">Disable 2FA</a>
+                    <br />
+                    <a asp-page="./GenerateRecoveryCodes" class="btn btn-primary" style="border:2px solid white;">Reset recovery codes</a>
+                }
+
+                <h3 class="text-primary">authenticator app</h3>
+                @if (!Model.HasAuthenticator)
+                {
+                    <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-primary" style="border:2px solid white;">Add authenticator app</a>
+                }
+                else
+                {
+                    <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-primary" style="border:2px solid white;">setup authenticator app</a>
+                    <br />
+                    <a id="reset-authenticator" asp-page="./ResetAuthenticator" class="btn btn-primary" style="border:2px solid white;">reset authenticator app</a>
+                }
+
+                @section Scripts {
+                    <partial name="_ValidationScriptsPartial" />
+                }
+            </div>
+        </div>
+    </div>
+</div>

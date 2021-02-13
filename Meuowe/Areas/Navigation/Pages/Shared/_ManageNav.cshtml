@@ -1,0 +1,28 @@
+@using Meuowe.Areas.Database.Models.Identity
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="col-12 col-sm-12 col-md-12 col-lg-3">
+        <div class="border-side-login">
+            <ul class="meuowe-nav-ul">
+                <li class="meuowe-nav-li">
+                    <a class="btn font-weight-bold text-orange @ManageNavPages.TreeNavClass(ViewContext)" asp-area="Social" asp-page="/Paws/UserPawHome" asp-page-handler="PawHome" asp-route-pawView="trail" id="trail">Trail</a>
+                </li>
+                <li class="meuowe-nav-li">
+                    <a class="btn font-weight-bold text-orange @ManageNavPages.TreeNavClass(ViewContext)" asp-area="Social" asp-page="/Paws/UserPawHome" asp-page-handler="PawHome" asp-route-pawView="tree" id="tree">Tree</a>
+                </li>
+            </ul>
+            <partial name="~/Areas/Navigation/Pages/Shared/_UserSettingsNav.cshtml" />
+        </div>
+    </div>
+}

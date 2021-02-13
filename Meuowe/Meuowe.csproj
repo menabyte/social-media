@@ -1,0 +1,73 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\" />
+    <Folder Include="Areas\Administration\" />
+    <Folder Include="Areas\Navigation\" />
+    <Folder Include="Areas\Social\" />
+    <Folder Include="Areas\Administration\Pages\" />
+    <Folder Include="Areas\Navigation\Pages\" />
+    <Folder Include="Areas\Social\Pages\" />
+    <Folder Include="Areas\Database\" />
+    <Folder Include="Areas\Database\Models\" />
+    <Folder Include="Areas\Database\Models\DatabaseObjects\" />
+    <Folder Include="Areas\Database\Models\Identity\" />
+    <Folder Include="Areas\Identity\" />
+    <Folder Include="Areas\Identity\Pages\" />
+    <Folder Include="Areas\Account\" />
+    <Folder Include="Areas\Account\Pages\" />
+    <Folder Include="Areas\Navigation\Pages\Shared\" />
+    <Folder Include="Areas\Database\Models\ViewModels\" />
+    <Folder Include="Areas\Social\Pages\Shared\" />
+    <Folder Include="Areas\Account\Pages\Authentication\" />
+    <Folder Include="Areas\Account\Pages\Personal\" />
+    <Folder Include="Areas\Identity\Pages\Shared\" />
+    <Folder Include="Pages\Shared\Components\" />
+    <Folder Include="ViewComponents\" />
+    <Folder Include="Pages\Shared\Components\DisplayedPaws\" />
+    <Folder Include="Pages\Shared\Components\DisplayedDiscoverPaws\" />
+    <Folder Include="Areas\Email\" />
+    <Folder Include="Pages\Shared\Components\DisplayedRepliesPaws\" />
+    <Folder Include="Pages\Shared\Components\DisplayedProfile\" />
+    <Folder Include="Areas\Social\Pages\Follows\" />
+    <Folder Include="Pages\Shared\Components\DisplayedFollows\" />
+    <Folder Include="Pages\Shared\Components\DisplayedFollow\" />
+    <Folder Include="Pages\Shared\Components\DisplayedSearchDropDown\" />
+  </ItemGroup>
+   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.4"><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+<PrivateAssets>all</PrivateAssets>
+</PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.4"><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+<PrivateAssets>all</PrivateAssets>
+</PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.4" />
+    <PackageReference Include="MailKit" Version="2.6.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.4.4" />
+    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+  </ItemGroup>
+   <ItemGroup>
+     <Content Remove="Areas\Account\Pages\PersonalData.cshtml" />
+     <Content Remove="Areas\Account\Pages\ResetAuthenticator.cshtml" />
+     <Content Remove="appsettings.json" />
+     <Content Remove="Properties\launchSettings.json" />
+     <Content Remove="wwwroot\img\meuowe_cat.png" />
+   </ItemGroup>
+   <ItemGroup>
+     <Compile Remove="Areas\Social\Pages\Crawl\UserCrawlHome.cshtml.cs" />
+     <Compile Remove="Areas\Database\Models\DatabaseObjects\MeuoweStatusDBO.cs" />
+   </ItemGroup>
+</Project>

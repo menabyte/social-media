@@ -1,0 +1,60 @@
+﻿@model Meuowe.Pages.IndexModel
+@using Meuowe.Areas.Database.Models.Identity
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+@if (!SignInManager.IsSignedIn(User))
+{
+    <div class="col-12 col-sm-12 col-md-12 col-lg-3">
+        <div class="container border-side-login text-center">
+            <h3 class="text-orange">follow the trail</h3>
+            <hr class="meuowe-jumbotron-seperator" />
+            <form id="identity" method="post">
+                <div asp-validation-summary="All" class="text-danger">
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <input class="form-control" asp-for="Input.UserName" placeholder="user name" />
+                        <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <br />
+                <div class="row">
+                    <div class="col">
+                        <input class="form-control" asp-for="Input.Password" placeholder="password" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col">
+                        <button type="submit" class="btn meuowe-button-primary">log in</button>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col">
+                        <a id="forgot-password" asp-area="Identity" asp-page="/ForgotPassword" class="btn meuowe-btn-outline-primary">forgot password?</a>
+                    </div>
+                </div>
+                <hr class="meuowe-jumbotron-seperator" />
+                <div class="row">
+                    <div class="col">
+                        <a asp-page="/Register" asp-area="Identity" asp-route-returnUrl="@Model.ReturnUrl" class="btn meuowe-btn-outline-primary">sign up</a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+}

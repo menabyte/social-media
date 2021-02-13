@@ -1,0 +1,98 @@
+﻿@page
+@model Meuowe.Areas.Social.Pages.Follows.UserFollowHomeModel
+@using Meuowe.Areas.Database.Models.Identity
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+@{
+    ViewData["Title"] = "Follows";
+}
+
+<input type="hidden" id="userView" value="@ViewData["userView"]" />
+<input type="hidden" id="userFollow" value="@ViewData["userFollow"]" />
+
+<div class="row d-flex justify-content-center text-center" id="user-follows"></div>
+
+@section Scripts {
+    <!--Load Partial Views-->
+    <script>$(document).ready(function () {
+            $("#user-follows").empty();
+            showFollows();
+        });</script>
+
+    <script>
+        function showFollows() {
+            var userView;
+            if (document.getElementById('userView') != null) {
+                userView = document.getElementById('userView').value;
+            }
+
+            var userFollow;
+            if (document.getElementById('userFollow') != null) {
+                userFollow = document.getElementById('userFollow').value;
+            }
+
+            $.ajax({
+                    type: "GET",
+                    data: {
+                        "userView": userView,
+                        "userFollow": userFollow
+                    },
+                    url: "@Url.Page("UserFollowHome", "FollowsViewComponent")",
+                    success: function (result) {
+                        $("#user-follows").empty();
+                        $("#user-follows").append(result);
+                    }
+                });
+        }
+    </script>
+
+    <!--Transactions-->
+    <script>
+    function followUser(userName) {
+        var userFollow;
+        if (document.getElementById('user-follow-' + userName) != null) {
+            userFollow = document.getElementById('user-follow-' + userName).value;
+        }
+
+         $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                 data: {
+                     "userName": userName,
+                     },
+                url: "@Url.Page("UserFollowHome", "UserFollow")",
+                success: function (result) {
+                 if (userFollow == 'Follow') {
+                     document.getElementById('user-follow-' + userName).value = 'Unfollow';
+                 }
+                 if (userFollow == 'UnFollow') {
+                     document.getElementById('user-follow-' + userName).value = 'Follow';
+                 }
+             }
+
+        });
+    }
+    </script>
+
+    <script>
+        function refreshFollow(userChildId) {
+            $.ajax({
+                 type: "GET",
+                 data: {
+                     "userChildId": userChildId
+                 },
+                url: "@Url.Page("UserFollowHome", "FollowViewComponent")",
+                success: function (result) {
+                    $('#follow-id-' + userChildId).empty();
+                    $('#follow-id-' + userChildId).append(result);
+                }
+            });
+        }
+    </script>
+}

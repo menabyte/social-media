@@ -1,0 +1,77 @@
+﻿@model Meuowe.Areas.Database.Models.ViewModels.ProfileVM
+@using Meuowe.Areas.Database.Models.Identity
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <div id="profile-id-@Model.UserId">
+        <div class="row">
+            <div class="col">
+                @if (Model.Relation == 1)
+                {
+                    <form enctype="multipart/form-data" method="post" asp-page-handler="UploadProfilePhoto">
+                        <label for="image">
+                            <img style="border-radius: 50%" src="@Model.AzurePhoto" />
+                            <input type="file" id="image" style="display:none;" onchange="this.form.submit();" asp-for="ProfilePhoto" />
+                        </label>
+                    </form>
+                }
+                else
+                {
+                    <img style="border-radius: 50%" src="@Model.AzurePhoto" />
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <span class="text-almost-black font-weight-bold">
+                    @Model.DisplayName
+                </span>
+                <span class="text-orange font-weight-bold">
+                    @@@Model.UserName
+                </span>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col">
+                @if (Model.Relation == 0)
+                {
+                    @if (null != Model.UserFollow)
+                    {
+                        <input class="btn meuowe-btn-outline-primary" type="button" value="UnFollow" id="user-unfollow" onclick="followUser('@Model.UserId');" />
+                    }
+                    else
+                    {
+                        <input class="btn meuowe-btn-outline-primary" type="button" value="Follow" id="user-follow" onclick="followUser('@Model.UserId')" />
+                    }
+                }
+            </div>
+        </div>
+        <br /><br />
+        <div class="row">
+            <div class="col">
+                <a class="text-almost-black" asp-area="Social" asp-page="/Follows/UserFollowHome" asp-page-handler="FollowHome" asp-route-userView="@Model.UserName" asp-route-userFollow="following">
+                    Following: @Model.FollowingCount
+                </a>
+            </div>
+            <div class="col-6">
+                <a class="text-almost-black" asp-area="Social" asp-page="/Follows/UserFollowHome" asp-page-handler="FollowHome" asp-route-userView="@Model.UserName" asp-route-userFollow="followers">
+                    Followers: @Model.FollowersCount
+                </a>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,29 @@
+﻿@using Meuowe.Areas.Database.Models.Identity
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <button type="button" class="btn font-weight-bold text-almost-black" data-toggle="collapse" data-target="#user-settings-list">settings</button>
+    <div id="user-settings-list" class="collapse">
+        <ul class="meuowe-nav-ul">
+            <li class="meuowe-nav-li">
+                <a class="btn font-weight-bold text-orange @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-area="Account" asp-page="/Personal/Profile">Profile</a>
+            </li>
+            <li class="meuowe-nav-li">
+                <a class="btn font-weight-bold text-orange @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-area="Account" asp-page="/Authentication/Email">Email</a>
+            </li>
+            <li class="meuowe-nav-li">
+                <a class="btn font-weight-bold text-orange @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-area="Account" asp-page="/Authentication/ChangePassword">Password</a>
+            </li>
+        </ul>
+    </div>
+}

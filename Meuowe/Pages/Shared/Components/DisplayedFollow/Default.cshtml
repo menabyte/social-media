@@ -1,0 +1,42 @@
+﻿@model Meuowe.Areas.Database.Models.ViewModels.FollowVM
+@using Meuowe.Areas.Database.Models.Identity
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="meuowe-follow-li">
+        <div class="row">
+            <div class="col-3">
+                <img style="border-radius: 50%" width="50" height="50" src="@Model.AzurePhoto" />
+            </div>
+            <div class="col-3">
+                <span class="text-almost-black">@Model.DisplayName</span>
+                <a class="btn btn-link  text-orange" asp-area="Social" asp-page="/Paws/UserPawHome" asp-page-handler="PawHome" asp-route-pawView="home" asp-route-userView="@Model.UserName" title="Manage">
+                    @@@Model.UserName
+                </a>
+            </div>
+            <div class="col-3">
+                @Model.ProfileBiography
+            </div>
+            <div class="col-3">
+                @if (null != Model.UserFollow)
+                {
+                    <input class="btn meuowe-button-primary" type="button" value="UnFollow" id="user-follow-@Model.UserName" onclick="followUser('@Model.UserName');" />
+                }
+                else
+                {
+                    <input class="btn meuowe-btn-outline-primary" type="button" value="Follow" id="user-follow-@Model.UserName" onclick="followUser('@Model.UserName')" />
+                }
+            </div>
+        </div>
+    </li>
+}

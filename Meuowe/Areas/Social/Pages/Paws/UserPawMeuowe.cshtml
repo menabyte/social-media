@@ -1,0 +1,38 @@
+﻿@page
+@model Meuowe.Areas.Social.Pages.Paws.UserPawMeuoweModel
+@{
+    ViewData["Title"] = "Meuowes";
+}
+
+<div class="container text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div id="paw-meuowe"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#paw-meuowe").empty();
+            pawMeuowe();
+        });
+    </script>
+
+    <script>
+        function pawMeuowe() {
+                $.ajax({
+                    type: "GET",
+                    data: {
+                        "pawId": @ViewBag.PawId,
+                        "pawUserId": "@ViewBag.PawUserId"
+                    },
+                    url: "@Url.Page("UserPawMeuowe", "PawMeuowePartial")",
+                    success: function (result) {
+                        $("#paw-meuowe").html(result);
+                    }
+                });
+        }
+    </script>
+}

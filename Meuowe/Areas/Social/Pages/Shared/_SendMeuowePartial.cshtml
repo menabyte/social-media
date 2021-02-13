@@ -1,0 +1,29 @@
+﻿@model Meuowe.Areas.Database.Models.ViewModels.PawVM
+
+@{
+    <!-- Modal -->
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="meuoweModalLabel">Meuowe @Model.UserName</h5>
+            </div>
+            <form method="post" asp-page-handler="Meuowe">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="control-label"></label>
+                        <input type="hidden" id="pawId" name="pawId" value="@Model.UserPaw.Id" />
+                        <input class="form-control" id="meuoweOffer" name="meuoweOffer" placeholder="meuowe offer" />
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="submitMeuowe()">send meuowe</button>
+                    <button type="button" class="btn meuowe-btn-outline-primary" data-dismiss="modal" aria-label="Close" onclick="closeCreate()">
+                        <span aria-hidden="true">Close</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+}

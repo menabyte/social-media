@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - meuowe</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+</head>
+<body class="meuowe-body">
+    <div class="container meuowe-header">
+        <div class="row justify-content-center text-center">
+            <div class="col-6 col-sm-4 order-sm-1">
+                <a class="text-orange" asp-area="" asp-page="/Index" asp-route-pawView="forYou">
+                    <img src="~/img/logo_meuowe_cat.png" onmouseover="this.src='/img/meuowe_cat_hover.png'" onmouseout="this.src='/img/logo_meuowe_cat.png'" width="50" height="50">
+                </a>
+            </div>
+            <partial name="_LoginPartial" />
+            <div class="col-12 col-sm-4 order-sm-4 meuowe-list">
+                <input class="form-control" style="display:inline; text-align:center;" type="text" name="userName" placeholder="find someone you know" onkeyup="searchUsers()" />
+                <span id="userList">
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <main role="main">
+            <div class="row">
+                @if (ViewData["Title"].ToString() != "Discover")
+                {
+                    <partial name="~/Areas/Navigation/Pages/Shared/_ManageNav.cshtml" />
+                }
+                else
+                {
+                    <partial name="~/Areas/Identity/Pages/Shared/_SideLoginPartial.cshtml" />
+                }
+                @RenderBody()
+            </div>
+        </main>
+    </div>
+
+    <br />
+
+    <footer class="meuowe-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-sm-12 text-center meuowe-footer-nav">
+                    <a class="text-orange" asp-area="" asp-page="/Privacy">About</a>
+                    <a class="text-orange" asp-area="" asp-page="/Privacy">Privacy Policy</a>
+                    <a class="text-orange" asp-area="" asp-page="/Privacy">Cookie Policy</a>
+                    <a class="text-orange" asp-area="" asp-page="/Privacy">Terms of Service</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 text-center text-orange">
+
+                    follow the trail
+
+                    <a class="text-orange" asp-area="" asp-page="/Index" asp-route-pawView="forYou">
+                        <img class="meuowe-logo" src="~/img/logo_meuowe_cat.png" onmouseover="this.src='/img/meuowe_cat_hover.png'" onmouseout="this.src='/img/meuowe_cat.png'" width="25" height="25">
+                    </a>
+
+                    &copy; meuowe 2020
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,144 @@
+﻿@page
+@model Meuowe.Areas.Social.Pages.Paws.UserPawDetailModel
+@{
+    ViewData["Title"] = "Pawprint Details";
+}
+
+<div class="row d-flex justify-content-center text-center" id="detail-paw" style="margin-top:1%;"></div>
+
+<hr class="meuowe-jumbotron-seperator" />
+
+<div class="row d-flex justify-content-center text-center" id="paw-replies"></div>
+
+
+@section Scripts {
+    <script>$(document).ready(function () {
+            $("#paw-replies").empty();
+            detailPaw();
+        });</script>
+
+    <script>$(window).scroll(function () {
+            if ($(window).scrollTop() ==
+                $(document).height() - $(window).height()) {
+                goReplyPaws();
+            }
+        });</script>
+
+    <!--Load Partial Views-->
+    <script>
+        function detailPaw() {
+                $.ajax({
+                    type: "GET",
+                    data: {
+                        "pawId": @ViewBag.PawId
+                    },
+                    url: "@Url.Page("UserPawDetail", "PawViewComponent")",
+                    success: function (result) {
+                        $("#detail-paw").html(result);
+                        goReplyPaws();
+                    }
+                });
+        }
+    </script>
+
+    <script>function goReplyPaws() {
+            var currentView;
+            if (document.getElementById('currentView') != null) {
+                currentView = document.getElementById('currentView').value;
+            }
+            replyPaws(currentView);
+        }</script>
+
+    <script>
+        function replyPaws(pawView) {
+            var pageIndex;
+            if (document.getElementById('pageIndex') != null) {
+                pageIndex = document.getElementById('pageIndex').value;
+            }         $.ajax({
+                 type: "GET",
+                 data: {
+                     "pawView": pawView,
+                     "pageIndex": pageIndex,
+                     "pawId": @ViewBag.PawId,
+                 },
+                url: "@Url.Page("UserPawDetail", "PawsViewComponent")",
+                success: function (result) {
+                    $("#no-paws").remove();
+                    $("#paw-replies").append(result);
+
+                if (document.getElementById('pageIndex') != null) {
+                    pageIndex = document.getElementById('pageIndex').value;
+                    pageIndex++;
+                    document.getElementById('pageIndex').value = pageIndex;
+                    }
+                 }
+            });
+        }
+    </script>
+
+    <script>
+    function replyUser(pawId, userPawId) {
+        $.ajax({
+                type: "GET",
+                data: {
+                         "pawId": pawId,
+                         "userPawId": userPawId,
+                     },
+                url: "@Url.Page("UserPawDetail", "ReplyUserPartial")",
+                success: function (result) {
+                    $("#reply-paw").html(result);
+                    refreshPaw(pawId);
+                }
+            });
+    }
+    </script>
+
+    <!--Close Partial Views-->
+    <script>function closeReply() {
+            $("#replyModal").remove();
+            $(document.body).removeClass('modal-open');
+            $('.modal-backdrop').remove();
+        }</script>
+
+    <!--Transactions-->
+
+    <script>
+    function followUser(pawId, userChildId) {
+         $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                 data: {
+                         "pawId": pawId,
+                         "userChildId": userChildId,
+                     },
+                url: "@Url.Page("UserPawDetail", "UserFollow")",
+                success: function (result) {
+                    $("#result-follow-user-" + pawId + "-" + userChildId).html(result);
+                    refreshPaw(pawId);
+                }
+            });
+    }
+    </script>
+
+    <script>
+    function submitReply() {
+        var pawId = $("#pawId").val();
+        var pawMessage = $("#pawMessage").val();
+        $.ajax({
+            url: "@Url.Page("UserPawDetail", "Reply")",
+            type: "POST",
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            data: "PawId=" + pawId + "&PawMessage=" + pawMessage,
+            success: function (result) {
+                closeReply();
+                refreshPaw(pawId);
+            }
+        });
+    }
+    </script>
+}

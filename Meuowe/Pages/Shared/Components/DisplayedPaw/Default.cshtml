@@ -1,0 +1,123 @@
+﻿@model Meuowe.Areas.Database.Models.ViewModels.PawVM
+@using Meuowe.Areas.Database.Models.Identity
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="border:none;">
+                <h5 class="modal-title" id="deleteModalLabel">do you want to delete this print?</h5>
+            </div>
+            <div class="modal-footer" style="border:none;">
+                <button type="button" class="btn meuowe-btn-outline-primary" data-dismiss="modal">no</button>
+                <button type="button" class="btn meuowe-button-primary" onclick="deletePrint('@Model.UserPaw.Id')">yes, delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-12 col-sm-12 col-md-4" id="paw-id-@Model.UserPaw.Id">
+    <div class="meuowe-block">
+        <div class="meuowe-displayed-paw-header">
+            @if (Model.Relation == 0)
+            {
+                <div class="row" style="margin-top:0px;margin-bottom:0px;">
+                    <div class="col">
+                        <button type="button" style="float:right;margin-right:5%;" class="close text-almost-black font-weight-bold" data-toggle="modal" data-target="#deleteModal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            }
+
+            <div class="row" style="margin-top:0px;margin-bottom:0px;">
+                <div class="col">
+                    <img style="border-radius: 50%; margin-bottom:0px; padding-bottom:0px;" width="50" height="50" src="@Model.AzurePhoto" />
+                </div>
+            </div>
+
+
+            <div class="row" style="margin-top:0px;margin-bottom:0px;">
+                <div class="col text-almost-black font-weight-bold">
+                    @Model.DisplayName
+                    <a class="text-orange font-weight-bold" asp-area="Social" asp-page="/Paws/UserPawHome" asp-page-handler="PawHome" asp-route-pawView="home" asp-route-userView="@Model.UserName" title="Manage">@@@Model.UserName</a>
+                </div>
+            </div>
+        </div>
+
+        <hr class="meuowe-jumbotron-seperator" />
+
+        <div class="meuowe-displayed-paw-body">
+                <div class="row">
+                    <div class="col">
+                        <a class="text-almost-black font-weight-bold" asp-area="Social" asp-page="/Paws/UserPawDetail" asp-page-handler="PawDetail" asp-route-pawId="@Model.UserPaw.Id">
+                            @Model.UserPaw.Message
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        <div id="meuowe-displayed-paw-body-date">
+                <div class="row">
+                    <div class="col text-orange">
+                        @String.Format("{0:g}", Model.UserPaw.CreatedDate)
+                    </div>
+                </div>
+            </div>
+
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <div class="meuowe-displayed-paw-footer">
+                <div class="row">
+                    <div class="col">
+                        <img src="~/img/comment-square.png" alt="reply paw" data-toggle="modal" data-target="#replyModal" value="Reply" onclick="replyUser('@Model.UserPaw.Id', '@Model.UserPaw.UserId')">
+                    </div>
+                    <div class="col">
+                        @if (null != Model.UserShake)
+                        {
+                            <img src="~/img/link-intact.png" alt="stop shaking paw" value="StopShaking" onclick="shakePaw('@Model.UserPaw.Id')">
+                        }
+                        else
+                        {
+                            <img src="~/img/link-broken.png" alt="shake paw" value="Shake" onclick="shakePaw('@Model.UserPaw.Id')">
+                        }
+                        @if (Model.UserShakeCount > 0)
+                        {
+                            <span>
+                                @Model.UserShakeCount
+                            </span>
+                        }
+                    </div>
+
+                    <div class="col">
+                        @if (null != Model.UserWagTail)
+                        {
+                            <img src="~/img/heart.png" alt="stop wagging tail" value="StopWagging" onclick="wagTail('@Model.UserPaw.Id')">
+                        }
+                        else
+                        {
+                            <img src="~/img/heart.png" alt="wag tail" value="Wagging" onclick="wagTail('@Model.UserPaw.Id')">
+                        }
+                        @if (Model.UserWagCount > 0)
+                        {
+                            <span>
+                                @Model.UserWagCount
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

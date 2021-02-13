@@ -1,0 +1,21 @@
+﻿@using Meuowe.Areas.Database.Models.Identity
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="col-6 col-sm-4 order-sm-12">
+        <a class="text-orange font-weight-bold" asp-area="Social" asp-page="/Paws/UserPawHome" asp-page-handler="PawHome" asp-route-pawView="home" title="Manage"><strong>meuowe @User.Identity.Name!</strong></a>
+        <form asp-area="Identity" asp-page="/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+            <button type="submit" class="btn btn-link text-almost-black"><strong>logout</strong></button>
+        </form>
+    </div>
+}
+else
+{
+    <div class="col-6 col-sm-4 order-sm-12">
+        <a class="text-orange" asp-area="Identity" asp-page="/Login"><strong class="text-nav">login</strong></a>
+    </div>
+}

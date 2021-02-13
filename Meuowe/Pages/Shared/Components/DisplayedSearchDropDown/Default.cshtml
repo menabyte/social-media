@@ -1,0 +1,31 @@
+﻿@model List<Meuowe.Areas.Database.Models.ViewModels.ProfileVM>
+@using Meuowe.Areas.Database.Models.Identity
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+@if (Model.Count > 0)
+{
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        <div class="row  meuowe-search text-center justify-content-center">
+            <div class="col-6">
+                <img style="border-radius: 50%" width="50" height="50" src="@Model.ElementAt(i).AzurePhoto" />
+            </div>
+            <div class="col-6">
+                @Model.ElementAt(i).DisplayName
+                <br />
+                <a class="text-orange" asp-area="Social" asp-page="/Paws/UserPawHome" asp-page-handler="PawHome" asp-route-pawView="home" asp-route-userView="@Model.ElementAt(i).UserName" title="Manage">
+                    @@@Model.ElementAt(i).UserName
+                </a>
+            </div>
+        </div>
+    }
+}

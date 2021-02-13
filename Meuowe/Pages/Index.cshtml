@@ -1,0 +1,314 @@
+﻿@page
+@model IndexModel
+
+@{ ViewData["Title"] = "Discover"; }
+
+<div class="col text-center font-weight-bold d-flex flex-column meuowe-print-home">
+    <input type="hidden" id="discover" value="@ViewData["currentView"]" />
+
+    <div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+        <div id="reply-paw"></div>
+    </div>
+
+    <div class="modal fade" id="meuoweModal" tabindex="-1" role="dialog" aria-labelledby="meuoweModalLabel" aria-hidden="true" style="display: none;">
+        <div id="send-meuowe"></div>
+    </div>
+
+    <div class="mb-auto">
+        <strong class="text-large text-almost-black">meuowe.</strong>
+        <strong class="text-regular text-almost-black">.meuowe.</strong>
+        <strong class="text-regular text-almost-black">.meuowe.</strong>
+        <strong class="text-large text-almost-black">say how you feel.</strong>
+    </div>
+
+    <div class="my-auto">
+        <strong class="text-large text-almost-black">meuowe.</strong>
+        <strong class="text-regular text-almost-black">.meuowe.</strong>
+        <strong class="text-regular text-almost-black">.meuowe.</strong>
+        <strong class="text-large text-almost-black">.meuowe</strong>
+    </div>
+
+    <div class="my-auto">
+        <strong class="text-large text-almost-black">meuowe.</strong>
+        <strong class="text-regular text-almost-black">hear what's going on in the world.</strong>
+        <strong class="text-regular text-almost-black">meuowe.</strong>
+    </div>
+
+    <div class="my-auto">
+        <strong class="text-regular text-almost-black">.meuowe</strong>
+        <strong class="text-large text-almost-black">meuowe.</strong>
+        <strong class="text-large text-almost-black">.meuowe.</strong>
+        <strong class="text-regular text-almost-black">.meuowe</strong>
+    </div>
+
+    <div class="my-auto">
+        <strong class="text-regular text-almost-black">meuowe.</strong>
+        <strong class="text-large text-almost-black">.meuowe.</strong>
+        <strong class="text-regular text-almost-black">.meuowe</strong>
+    </div>
+</div>
+
+<div class="col text-center font-weight-bold">
+    <div class="row meuowe-print-nav">
+        <div class="col-12">
+            <ul class="nav nav-fill w-100 justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link text-orange" asp-area="" asp-page="/Index" asp-route-discover="forYou">for you</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-orange" asp-area="" asp-page="/Index" asp-route-discover="news">news</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-orange" asp-area="" asp-page="/Index" asp-route-discover="sports">sports</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-orange" asp-area="" asp-page="/Index" asp-route-discover="music">music</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row d-flex justify-content-center text-center print-block" id="displayed-prints"></div>
+</div>
+
+@section Scripts {
+    <!--load prints-->
+    <script>$(document).ready(function () {
+            $("#displayed-prints").empty();
+            showPaws();
+        });</script>
+
+    <script>$(window).scroll(function () {
+            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                showPaws();
+            }
+        });</script>
+
+    <!--load views-->
+    <!--**********************************************-->
+    <script>
+        function showPaws() {
+            var discover;
+            if (document.getElementById('discover') != null) {
+                discover = document.getElementById('discover').value;
+        }
+        var pageIndex;
+        if (document.getElementById('pageIndex') != null) {
+            pageIndex = document.getElementById('pageIndex').value;
+        }
+
+        $.ajax({
+            type: "GET",
+            data: {
+                "discover": discover,
+                "pageIndex": pageIndex
+            },
+            url: "@Url.Page("Index", "PawsViewComponent")",
+            success: function (result) {
+                $("#no-paws").remove();
+                $("#displayed-prints").append(result);
+
+                if (document.getElementById('pageIndex') != null) {
+                    pageIndex = document.getElementById('pageIndex').value;
+                    pageIndex++;
+                    document.getElementById('pageIndex').value = pageIndex;
+                }
+            }
+        });
+    }
+    </script>
+
+    <script>
+        function addPaw(pawId) {
+            $.ajax({
+                type: "GET",
+                data:
+                {
+                    "pawId": pawId
+                },
+                url: "@Url.Page("Index", "PawViewComponent")",
+                success: function (result) {
+                    $("#displayed-prints").prepend(result);
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function refreshPaw(pawId) {
+            $.ajax({
+                type: "GET",
+                data:
+                {
+                    "pawId": pawId
+                },
+                 url: "@Url.Page("Index", "PawViewComponent")",
+                success: function (result) {
+                    $('#paw-id-' + pawId).empty();
+                    $('#paw-id-' + pawId).replaceWith(result);
+                }
+            });
+        }
+    </script>
+
+    <!--print transactions-->
+    <!--**********************************************-->
+    <script>
+        function replyUser(pawId, userPawId) {
+            $.ajax({
+                type: "GET",
+                data: {
+                    "pawId": pawId,
+                    "userPawId": userPawId,
+                },
+                url: "@Url.Page("Index", "ReplyUserPartial")",
+                success: function (result) {
+                    $("#reply-paw").html(result);
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function submitReply() {
+            var pawId = $("#pawId").val();
+            var pawMessage = $("#pawMessage").val();
+            $.ajax({
+                url: "@Url.Page("Index", "Reply")",
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                data: "PawId=" + pawId + "&PawMessage=" + pawMessage,
+                success: function (result) {
+                    closeReply();
+                    refreshPaw(pawId);
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function sendMeuowe(pawId, userPawId) {
+            $.ajax({
+                type: "GET",
+                data: {
+                    "pawId": pawId,
+                    "userPawId": userPawId,
+                },
+                url: "@Url.Page("Index", "SendMeuowePartial")",
+                success: function (result) {
+                    $("#send-meuowe").html(result);
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function submitMeuowe() {
+            var pawId = $("#pawId").val();
+            var meuoweOffer = $("#meuoweOffer").val();
+            $.ajax({
+                url: "@Url.Page("Index", "Meuowe")",
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                data: "PawId=" + pawId +
+                    "&MeuoweOffer=" + meuoweOffer,
+                success: function (result) {
+                    closeMeuowe();
+                    refreshPaw(pawId);
+                }
+            });
+        }
+    </script>
+
+    <!--print interactions-->
+    <script>
+        function followUser(userChildId) {
+             $.ajax({
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                     data: {
+                             "userChildId": userChildId,
+                         },
+                    url: "@Url.Page("Index", "UserFollow")",
+                    success: function (result) {
+                        showProfile();
+                    }
+                });
+        }
+    </script>
+
+    <script>
+        function shakePaw(pawId) {
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: {
+                    "pawId": pawId
+                },
+                url: "@Url.Page("Index", "ShakePaw")",
+                success: function (result) {
+                    refreshPaw(pawId);
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function wagTail(pawId) {
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: {
+                    "pawId": pawId
+                },
+                url: "@Url.Page("Index", "WagTail")",
+                success: function (result) {
+                    refreshPaw(pawId);
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function deletePrint(pawId) {
+            $.ajax({
+                url: "@Url.Page("Index", "Delete")",
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                data: "pawId=" + pawId,
+                success: function (result) {
+                    closeDelete();
+                    $('#paw-id-' + pawId).remove();
+                }
+            });
+        }
+    </script>
+
+    <!--close modals-->
+    <script>function closeReply() {
+            $("#replyModal").empty();
+            $('.modal-backdrop').remove();
+            $(document.body).removeClass('modal-open');
+            $("#replyModal").replaceWith('<div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;"><div id="reply-paw"></div></div>');
+        }</script>
+
+    <script>function closeDelete() {
+            $("#deleteModal").empty();
+            $('.modal-backdrop').remove();
+            $(document.body).removeClass('modal-open');
+        }</script>
+}

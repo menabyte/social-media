@@ -1,0 +1,27 @@
+@page
+@model Meuowe.Areas.Identity.Pages.RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Register confirmation";
+}
+
+
+@{
+    <div class="container">
+        <div class="row justify-content-center text-center meuowe-jumbotron">
+            <div col-12>
+               @if (@Model.DisplayConfirmAccountLink)
+                {
+                    <a class="text-orange font-weight-bold" id="confirm-link" href="@Model.EmailConfirmationUrl">
+                        click here to confirm your account :)
+                    </a>
+                }
+                else
+                {
+                    <p class="text-orange font-weight-bold">
+                        Please check your email to confirm your account.
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+}
