@@ -6,15 +6,21 @@ It was hosted on Azure with a SQL database. It can be ran locally with an Sqlite
 The Startup.cs file has the conditional that checks what environment is being used.
 
 Application Features
+    
+    Identity Login
   
-    User Profiles
+    Create User Profiles
   
-    Profile Photos
+    Upload Profile Photos
+    
+    Create Post With Text or Photos
   
-    Commenting and Replies that include text or photos
+    Replies With Text or Photos
   
-    Likes
+    Like Post or Replies
   
-    Repost
+    Repost Post or Replies
   
-    Ability to Follow and have Followers
+    Ability to Follow
+    
+    Timeline That Only Shows Who You Follow
