@@ -6,9 +6,9 @@ It was hosted on Azure with a SQL database. It can be ran locally with an Sqlite
 The Startup.cs file has the conditional that checks what environment is being used.
 
 Features
--User Profiles
--Profile Photos
--Commenting and Replies that include text or photos
--Likes
--Repost
--Followers and Following
+  User Profiles
+  Profile Photos
+  Commenting and Replies that include text or photos
+  Likes
+  Repost
+  Followers and Following
