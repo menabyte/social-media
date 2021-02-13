@@ -1,5 +1,5 @@
 # social media web application
-Social media web application developed in C# .NET with Razor Pages
+Social media web application developed in C# .NET with Razor Pages using an SQL database
 
 This application is a personal project I created for fun resume project. 
 It was hosted on Azure with a SQL database. It can be ran locally with an Sqlite database.
