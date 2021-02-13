@@ -17,4 +17,4 @@ Application Features
   
     Repost
   
-    Followers and Following
+    Ability to Follow and have Followers
